@@ -42,8 +42,8 @@
                                  text:(NSString*)text
                             textColor:(UIColor*)textColor
                             fillColor:(UIColor*)fillColor {
-  CGFloat number = text.floatValue;
-  NSString* labelText = [NSString stringWithFormat:@"%.1f", number];
+  int number = text.intValue;
+  NSString* labelText = [NSString stringWithFormat:@"%d", number];
   XAnimationLabel* topLabel = [[XAnimationLabel alloc] initWithFrame:frame];
   topLabel.backgroundColor = fillColor;
   [topLabel setTextAlignment:NSTextAlignmentCenter];
@@ -86,9 +86,10 @@
   }
   [self setTextValue:self.currentValue];
 }
-
+// liang change
 - (void)setTextValue:(CGFloat)number {
-  self.text = [NSString stringWithFormat:@"%.1f", number];
+    int numInt = number;
+    self.text = [NSString stringWithFormat:@"%d", numInt];
 }
 
 - (void)countFrom:(CGFloat)from to:(CGFloat)to duration:(CGFloat)duration {

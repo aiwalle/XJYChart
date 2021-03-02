@@ -28,8 +28,9 @@
   [UIColor colorWithRed:24 / 255.0 green:141 / 255.0 blue:240 / 255.0 alpha:1] \
       .CGColor
 #define BarBackgroundFillColor \
-  [UIColor colorWithRed:232 / 255.0 green:232 / 255.0 blue:232 / 255.0 alpha:1]
-#define animationDuration 3
+  [UIColor whiteColor]
+//  [UIColor colorWithRed:232 / 255.0 green:232 / 255.0 blue:232 / 255.0 alpha:1]
+#define animationDuration 0.1
 
 @interface XBarContainerView ()
 @property(nonatomic, strong) CABasicAnimation* pathAnimation;
@@ -288,25 +289,37 @@
       CGPointMake(rect.origin.x + (rect.size.width) / 2, (rect.origin.y));
 
   CAShapeLayer* chartLine = [CAShapeLayer layer];
-  chartLine.lineCap = kCALineCapSquare;
-  chartLine.lineJoin = kCALineJoinRound;
-  chartLine.lineWidth = rect.size.width;
+//  chartLine.lineCap = kCALineCapRound;
+//  chartLine.lineJoin = kCALineJoinRound;
+//  chartLine.lineWidth = rect.size.width;
+//  chartLine.lineDashPhase
 
   // animation path(beacause of line width...so animation path must defferent
   // with real path)
-  CGPoint temStartPoint =
-      CGPointMake(startPoint.x, startPoint.y + rect.size.width / 2);
-  CGPoint temEndPoint =
-      CGPointMake(endPoint.x, endPoint.y + rect.size.width / 2);
-  UIBezierPath* temPath = [[UIBezierPath alloc] init];
-  [temPath moveToPoint:temStartPoint];
-  [temPath addLineToPoint:temEndPoint];
-
+//  CGPoint temStartPoint =
+//      CGPointMake(startPoint.x, startPoint.y + rect.size.width / 2);
+//  CGPoint temEndPoint =
+//      CGPointMake(endPoint.x, endPoint.y + rect.size.width / 2);
+//  UIBezierPath* temPath = [[UIBezierPath alloc] init];
+//  [temPath moveToPoint:temStartPoint];
+//  [temPath addLineToPoint:temEndPoint];
+    
+    
+    
+//    UIBezierPath* temPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:rect.size.width * 0.3];
+    UIBezierPath* temPath = [UIBezierPath bezierPathWithRoundedRect:rect byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:CGSizeMake(rect.size.width * 0.2, rect.size.width * 0.2)];
+    
+//    [UIBezierPath bez];
+//    [fillColor set];
+//    [temPath fill];
+    
   chartLine.path = temPath.CGPath;
-  chartLine.strokeStart = 0.0;
-  chartLine.strokeEnd = 1.0;
-  chartLine.strokeColor = fillColor.CGColor;
-  [chartLine addAnimation:self.pathAnimation forKey:@"strokeEndAnimation"];
+    chartLine.fillColor = fillColor.CGColor;
+//  chartLine.strokeStart = 0.0;
+//  chartLine.strokeEnd = 1.0;
+//  chartLine.strokeColor = fillColor.CGColor;
+  
+//  [chartLine addAnimation:self.pathAnimation forKey:@"strokeEndAnimation"];
   // help to judge is touch in area
   chartLine.frameValue = [NSValue valueWithCGRect:rect];
   chartLine.selectStatusNumber = [NSNumber numberWithBool:NO];
@@ -362,47 +375,47 @@
   CGPoint __block point = [[touches anyObject] locationInView:self];
 
   // touch whole bar
-  [self.backgroundLayerArray enumerateObjectsUsingBlock:^(CALayer* _Nonnull obj,
-                                                          NSUInteger idx,
-                                                          BOOL* _Nonnull stop) {
-    CAShapeLayer* shapeLayer = (CAShapeLayer*)obj;
-    CGRect layerFrame = shapeLayer.frameValue.CGRectValue;
-
-    if (CGRectContainsPoint(layerFrame, point)) {
-      //上一次点击的layer,清空上一次的状态
-      CAShapeLayer* preShapeLayer =
-          (CAShapeLayer*)
-              self.layerArray[self.coverLayer.selectIdxNumber.intValue];
-      preShapeLayer.selectStatusNumber = [NSNumber numberWithBool:NO];
-      [self.coverLayer removeFromSuperlayer];
-
-      // Notification + Delegate To CallBack
-      [[NSNotificationCenter defaultCenter]
-          postNotificationName:[XNotificationBridge shareXNotificationBridge]
-                                   .TouchBarNotification
-                        object:nil
-                      userInfo:
-                          @{
-                                [XNotificationBridge shareXNotificationBridge].
-                                BarIdxNumberKey : @(idx)
-                          }];
-      CAShapeLayer* subShapeLayer = (CAShapeLayer*)self.layerArray[idx];
-      if (subShapeLayer.selectStatusNumber.boolValue == YES) {
-        subShapeLayer.selectStatusNumber = [NSNumber numberWithBool:NO];
-        [self.coverLayer removeFromSuperlayer];
-        return;
-      }
-      BOOL boolValue = subShapeLayer.selectStatusNumber.boolValue;
-      subShapeLayer.selectStatusNumber = [NSNumber numberWithBool:!boolValue];
-      self.coverLayer =
-          [self rectCoverGradientLayerWithBounds:subShapeLayer.frameValue
-                                                     .CGRectValue];
-      self.coverLayer.selectIdxNumber = @(idx);
-
-      [subShapeLayer addSublayer:self.coverLayer];
-      return;
-    }
-  }];
+//  [self.backgroundLayerArray enumerateObjectsUsingBlock:^(CALayer* _Nonnull obj,
+//                                                          NSUInteger idx,
+//                                                          BOOL* _Nonnull stop) {
+//    CAShapeLayer* shapeLayer = (CAShapeLayer*)obj;
+//    CGRect layerFrame = shapeLayer.frameValue.CGRectValue;
+//
+//    if (CGRectContainsPoint(layerFrame, point)) {
+//      //上一次点击的layer,清空上一次的状态
+//      CAShapeLayer* preShapeLayer =
+//          (CAShapeLayer*)
+//              self.layerArray[self.coverLayer.selectIdxNumber.intValue];
+//      preShapeLayer.selectStatusNumber = [NSNumber numberWithBool:NO];
+//      [self.coverLayer removeFromSuperlayer];
+//
+//      // Notification + Delegate To CallBack
+//      [[NSNotificationCenter defaultCenter]
+//          postNotificationName:[XNotificationBridge shareXNotificationBridge]
+//                                   .TouchBarNotification
+//                        object:nil
+//                      userInfo:
+//                          @{
+//                                [XNotificationBridge shareXNotificationBridge].
+//                                BarIdxNumberKey : @(idx)
+//                          }];
+//      CAShapeLayer* subShapeLayer = (CAShapeLayer*)self.layerArray[idx];
+//      if (subShapeLayer.selectStatusNumber.boolValue == YES) {
+//        subShapeLayer.selectStatusNumber = [NSNumber numberWithBool:NO];
+//        [self.coverLayer removeFromSuperlayer];
+//        return;
+//      }
+//      BOOL boolValue = subShapeLayer.selectStatusNumber.boolValue;
+//      subShapeLayer.selectStatusNumber = [NSNumber numberWithBool:!boolValue];
+//      self.coverLayer =
+//          [self rectCoverGradientLayerWithBounds:subShapeLayer.frameValue
+//                                                     .CGRectValue];
+//      self.coverLayer.selectIdxNumber = @(idx);
+//
+//      [subShapeLayer addSublayer:self.coverLayer];
+//      return;
+//    }
+//  }];
 }
 
 #pragma mark Notification Action
